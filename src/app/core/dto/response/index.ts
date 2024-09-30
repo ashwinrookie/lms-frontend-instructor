@@ -1,0 +1,1 @@
+export * from "./signup-instructor.response.dto";
