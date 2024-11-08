@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { environment } from 'src/environments/environment';
 import {
+	GetInstructorProfileResponseDTO,
 	SignupInstructorRequestDTO,
 	SignupInstructorResponseDTO
 } from '../dto';
@@ -16,13 +17,19 @@ export class AuthService {
 	constructor(private _httpClient: HttpClient) { }
 
 	signupInstructor(
-		SignupInstructorRequestDTO: SignupInstructorRequestDTO
+		signupInstructorRequestDTO: SignupInstructorRequestDTO
 	): Observable<SignupInstructorResponseDTO> {
 
 		return this._httpClient
 			.post<SignupInstructorResponseDTO>(
 				`${this._authApiUrl}/instructor/register`,
-				SignupInstructorRequestDTO
+				signupInstructorRequestDTO
 			);
+	}
+
+	getInstructorProfile(): Observable<GetInstructorProfileResponseDTO> {
+		return this._httpClient.get<GetInstructorProfileResponseDTO>(
+			`${this._authApiUrl}/instructor`
+		);
 	}
 }

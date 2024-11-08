@@ -1,4 +1,6 @@
 import { Injectable } from '@angular/core';
+import { environment } from 'src/environments/environment';
+import { Router } from '@angular/router';
 import {
 	HttpRequest,
 	HttpHandler,
@@ -11,8 +13,6 @@ import {
 import { catchError, map, Observable, switchMap, throwError } from 'rxjs';
 import { getErrorMessage } from '../helpers';
 import { ErrorCodes } from '../errors';
-import { environment } from 'src/environments/environment';
-import { Router } from '@angular/router';
 
 
 @Injectable()
@@ -30,10 +30,10 @@ export class HttpInterceptorService implements HttpInterceptor {
 		if (token)
 			clonedRequest = request.clone({
 				setHeaders: {
-					Authorization: `Bearer ${token}`
-				}
+					authorization: `Bearer ${token}`
+				},
+				withCredentials: true
 			});
-
 
 		return next.handle(clonedRequest).pipe(
 			map((event: HttpEvent<any>) => {
@@ -52,7 +52,7 @@ export class HttpInterceptorService implements HttpInterceptor {
 						errorMessage = getErrorMessage(errorCode);
 
 						if (errorCode === ErrorCodes.unauthorized)
-							return this.handleUnauthorizedError(request, next, error);
+							return this._handleUnauthorizedError(request, next, error);
 
 					}
 				}
@@ -62,7 +62,7 @@ export class HttpInterceptorService implements HttpInterceptor {
 		);
 	}
 
-	private handleUnauthorizedError(request: HttpRequest<unknown>, next: HttpHandler, error: HttpErrorResponse): Observable<HttpEvent<unknown>> {
+	private _handleUnauthorizedError(request: HttpRequest<unknown>, next: HttpHandler, error: HttpErrorResponse): Observable<HttpEvent<unknown>> {
 		const refreshToken = localStorage.getItem('refreshToken');
 
 		if (!refreshToken)
@@ -71,8 +71,8 @@ export class HttpInterceptorService implements HttpInterceptor {
 
 		return this._http.post(`${environment.apiUrl}/auth/token/refresh`, { refreshToken }).pipe(
 			switchMap((response: any) => {
-				const newAccessToken = response.data.accessToken;
-				const newRefreshToken = response.data.refreshToken;
+				const newAccessToken = response.accessToken;
+				const newRefreshToken = response.refreshToken;
 
 				localStorage.setItem('authToken', newAccessToken);
 				localStorage.setItem('refreshToken', newRefreshToken);
@@ -98,5 +98,3 @@ export class HttpInterceptorService implements HttpInterceptor {
 		);
 	}
 }
-
-export { HttpInterceptor };
