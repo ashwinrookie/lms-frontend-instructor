@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from 'src/app/core';
 
 @Component({
@@ -10,7 +11,10 @@ import { AuthService } from 'src/app/core';
 export class SignupComponent {
 	signupForm: FormGroup;
 
-	constructor(private _authService: AuthService) {
+	constructor(
+		private _authService: AuthService,
+		private _router: Router
+	) {
 		this.signupForm = new FormGroup({
 			firstName: new FormControl('', Validators.required),
 			lastName: new FormControl('', Validators.required),
@@ -29,6 +33,11 @@ export class SignupComponent {
 			.subscribe({
 				next: (signupResponse) => {
 					console.log("Registration successful ::", signupResponse);
+
+					localStorage.setItem("authToken", signupResponse.accessToken);
+					localStorage.setItem("refreshToken", signupResponse.refreshToken);
+
+					this._router.navigate(['/']);
 				},
 				error: (error: Error) => {
 					console.log("Error in signup Instructor ::", error.message);
