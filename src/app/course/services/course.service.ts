@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import {
 	CreateCourseRequestDTO,
 	CreateCourseResponseDTO,
+	GetAllCoursesResponseDTO,
+	GetCourseResponseDTO,
 	SKIP_AUTH,
 	UpdateCourseRequestDTO,
 	UpdateCourseResponseDTO,
@@ -64,5 +66,13 @@ export class CourseService {
 
 	updateCourse(course: UpdateCourseRequestDTO): Observable<UpdateCourseResponseDTO> {
 		return this._httpClient.post<UpdateCourseResponseDTO>(`${this._courseApiUrl}/update-by-instructor`, course);
+	}
+
+	getAllCourses(): Observable<GetAllCoursesResponseDTO[]> {
+		return this._httpClient.get<GetAllCoursesResponseDTO[]>(`${this._courseApiUrl}/all-by-instructor`);
+	}
+
+	getCourse(courseId: string): Observable<GetCourseResponseDTO> {
+		return this._httpClient.get<GetCourseResponseDTO>(`${this._courseApiUrl}/by-instructor?courseId=${courseId}`);
 	}
 }

@@ -7,8 +7,9 @@ import { MyCoursesComponent } from './my-courses/my-courses.component';
 import { CreateCourseComponent } from './create-course/create-course.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbAccordionModule } from '@ng-bootstrap/ng-bootstrap';
+import { UpdateCourseComponent } from './update-course/update-course.component';
 @NgModule({
-  declarations: [CourseComponent, MyCoursesComponent, CreateCourseComponent],
+  declarations: [CourseComponent, MyCoursesComponent, CreateCourseComponent, UpdateCourseComponent],
   imports: [
     CommonModule,
     CourseRoutingModule,
