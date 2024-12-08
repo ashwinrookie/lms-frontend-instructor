@@ -31,14 +31,27 @@ export class CreateCourseComponent {
     );
   }
 
+  // Remove a section
+  removeSection(index: number): void {
+    this.sections.removeAt(index);
+  }
+
   // Add a new lecture to a specific section
   addLecture(sectionIndex: number): void {
     const lectures = this.getLectures(sectionIndex);
     lectures.push(
       this.fb.group({
         lectureTitle: ['', Validators.required], // Lecture title field
+        lectureVideo: [null, Validators.required], // Lecture video field
+        lectureCaptions: [null, Validators.required], // Lecture captions field
       })
     );
+  }
+
+  // Remove a lecture from a specific section
+  removeLecture(sectionIndex: number, lectureIndex: number): void {
+    const lectures = this.getLectures(sectionIndex);
+    lectures.removeAt(lectureIndex);
   }
 
   // Getter for lectures FormArray within a section
