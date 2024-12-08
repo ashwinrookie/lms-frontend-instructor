@@ -80,7 +80,8 @@ export class HttpInterceptorService implements HttpInterceptor {
 				const clonedRequest = request.clone({
 					setHeaders: {
 						Authorization: `Bearer ${newAccessToken}`
-					}
+					},
+					withCredentials: true
 				});
 
 				return next.handle(clonedRequest);

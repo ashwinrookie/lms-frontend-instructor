@@ -1,53 +1,55 @@
 <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
-    <!-- Course Title and Description Fields -->
-    <div>
-        <label for="title">Course Title</label>
-        <input formControlName="title" id="title">
-        <div *ngIf="courseForm.get('title')?.invalid && courseForm.get('title')?.touched">
-            Title is required.
-        </div>
-    </div>
-
-    <div>
-        <label for="description">Course Description</label>
-        <input formControlName="description" id="description">
-        <div *ngIf="courseForm.get('description')?.invalid && courseForm.get('description')?.touched">
-            Description is required.
-        </div>
-    </div>
-
-    <!-- Sections FormArray -->
-    <div formArrayName="sections">
-        <div *ngFor="let section of sections.controls; let i = index" [formGroupName]="i">
-            <div>
-                <label for="title">Section Title</label>
-                <input formControlName="title" id="title">
-                <div *ngIf="section.get('title')?.invalid && section.get('title')?.touched">
-                    Section Title is required.
-                </div>
-            </div>
-
-            <!-- Lectures FormArray -->
-            <div formArrayName="lectures">
-                <div *ngFor="let lecture of section.get('lectures')?.controls; let j = index" [formGroupName]="j">
-                    <div>
-                        <label for="lectureTitle">Lecture Title</label>
-                        <input formControlName="lectureTitle" id="lectureTitle">
-                        <div *ngIf="lecture.get('lectureTitle')?.invalid && lecture.get('lectureTitle')?.touched">
-                            Lecture Title is required.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Add Lecture Button -->
-            <button type="button" (click)="addLecture(i)">Add Lecture</button>
-        </div>
-    </div>
-
-    <!-- Add Section Button -->
-    <button type="button" (click)="addSection()">Add Section</button>
-
-    <!-- Submit Button -->
-    <button type="submit" [disabled]="courseForm.invalid">Submit</button>
-</form>
+	<!-- Course Title -->
+	<div>
+	  <label for="title">Course Title</label>
+	  <input formControlName="title" id="title">
+	  <div *ngIf="courseForm.get('title')?.invalid && courseForm.get('title')?.touched">
+		Title is required.
+	  </div>
+	</div>
+  
+	<!-- Course Description -->
+	<div>
+	  <label for="description">Course Description</label>
+	  <input formControlName="description" id="description">
+	  <div *ngIf="courseForm.get('description')?.invalid && courseForm.get('description')?.touched">
+		Description is required.
+	  </div>
+	</div>
+  
+	<!-- Sections -->
+	<div formArrayName="sections">
+	  <div *ngFor="let section of sections.controls; let i = index" [formGroupName]="i">
+		<div>
+		  <label for="sectionTitle-{{ i }}">Section Title</label>
+		  <input formControlName="sectionTitle" id="sectionTitle-{{ i }}">
+		  <div *ngIf="section.get('sectionTitle')?.invalid && section.get('sectionTitle')?.touched">
+			Section Title is required.
+		  </div>
+		</div>
+  
+		<!-- Lectures -->
+		<div formArrayName="lectures">
+		  <div *ngFor="let lecture of getLectureControls(i); let j = index" [formGroupName]="j">
+			<div>
+			  <label for="lectureTitle-{{ i }}-{{ j }}">Lecture Title</label>
+			  <input formControlName="lectureTitle" id="lectureTitle-{{ i }}-{{ j }}">
+			  <div *ngIf="lecture.get('lectureTitle')?.invalid && lecture.get('lectureTitle')?.touched">
+				Lecture Title is required.
+			  </div>
+			</div>
+		  </div>
+		</div>
+  
+		<!-- Add Lecture Button -->
+		<button type="button" (click)="addLecture(i)">Add Lecture</button>
+	  </div>
+	</div>
+  
+	<!-- Add Section Button -->
+	<button type="button" (click)="addSection()">Add Section</button>
+  
+	<!-- Submit Button -->
+	<button type="submit" [disabled]="courseForm.invalid">Submit</button>
+  </form>
+  

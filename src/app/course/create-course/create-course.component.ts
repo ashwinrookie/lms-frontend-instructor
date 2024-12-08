@@ -10,14 +10,18 @@ export class CreateCourseComponent {
 
   constructor(private fb: FormBuilder) {
     this.courseForm = this.fb.group({
+      title: ['', Validators.required], // Course title
+      description: ['', Validators.required], // Course description
       sections: this.fb.array([]), // Main sections array
     });
   }
 
+  // Getter for sections FormArray
   get sections(): FormArray {
     return this.courseForm.get('sections') as FormArray;
   }
 
+  // Add a new section
   addSection(): void {
     this.sections.push(
       this.fb.group({
@@ -27,6 +31,7 @@ export class CreateCourseComponent {
     );
   }
 
+  // Add a new lecture to a specific section
   addLecture(sectionIndex: number): void {
     const lectures = this.getLectures(sectionIndex);
     lectures.push(
@@ -36,11 +41,22 @@ export class CreateCourseComponent {
     );
   }
 
+  // Getter for lectures FormArray within a section
   getLectures(sectionIndex: number): FormArray {
     return this.sections.at(sectionIndex).get('lectures') as FormArray;
   }
 
+  // Helper to get lecture controls for iteration in the template
   getLectureControls(sectionIndex: number): FormGroup[] {
     return this.getLectures(sectionIndex).controls as FormGroup[];
+  }
+
+  // Submit handler
+  onSubmit(): void {
+    if (this.courseForm.valid) {
+      console.log('Form Submitted:', this.courseForm.value);
+    } else {
+      console.error('Form is invalid!');
+    }
   }
 }
