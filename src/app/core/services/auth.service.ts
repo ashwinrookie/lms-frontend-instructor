@@ -4,6 +4,8 @@ import { HttpClient } from "@angular/common/http";
 import { environment } from 'src/environments/environment';
 import {
 	GetInstructorProfileResponseDTO,
+	SigninInstructorRequestDTO,
+	SigninInstructorResponseDTO,
 	SignupInstructorRequestDTO,
 	SignupInstructorResponseDTO
 } from '../dto';
@@ -30,6 +32,15 @@ export class AuthService {
 	getInstructorProfile(): Observable<GetInstructorProfileResponseDTO> {
 		return this._httpClient.get<GetInstructorProfileResponseDTO>(
 			`${this._authApiUrl}/instructor`
+		);
+	}
+
+	signinInstructor(
+		signinInstructorRequestDTO: SigninInstructorRequestDTO
+	): Observable<SigninInstructorResponseDTO> {
+		return this._httpClient.post<SigninInstructorResponseDTO>(
+			`${this._authApiUrl}/instructor/sign-in`,
+			signinInstructorRequestDTO
 		);
 	}
 }
