@@ -13,23 +13,20 @@ const routes: Routes = [
     component: CourseComponent,
     children: [
       {
-        path: 'my-courses',
+        path: '',
+        pathMatch: 'full',
         component: MyCoursesComponent,
-		resolve: [
-			getAllCoursesResolver()
-		]
+        resolve: [getAllCoursesResolver()],
       },
       {
         path: 'create-course',
         component: CreateCourseComponent,
       },
-	  {
-		path: 'update-course',
-		component: UpdateCourseComponent,
-		resolve: [
-			getCourseResolver()
-		]
-	  }
+      {
+        path: 'update-course',
+        component: UpdateCourseComponent,
+        resolve: [getCourseResolver()],
+      },
     ],
   },
 ];
