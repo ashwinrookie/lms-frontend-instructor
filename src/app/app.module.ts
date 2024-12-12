@@ -10,6 +10,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AppInitializerService, AuthService, HttpInterceptorService } from './core';
 import { AppState, InstructorEffects, instructorReducer, metaReducers } from './states';
+import { HeaderComponent } from './shared/components/header/header.component';
+import { LoadersComponent } from './shared/components/loaders/loaders.component';
+import { ToastComponent } from './shared/components/toast/toast.component';
 
 export function appInitializerFactory(
 	appInitializerService: AppInitializerService
@@ -19,7 +22,10 @@ export function appInitializerFactory(
 
 @NgModule({
 	declarations: [
-		AppComponent
+		AppComponent,
+  HeaderComponent,
+  LoadersComponent,
+  ToastComponent
 	],
 	imports: [
 		BrowserModule,

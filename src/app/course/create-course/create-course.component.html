@@ -1,95 +1,115 @@
-<form [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="container mt-4">
+<form [formGroup]="courseForm" (ngSubmit)="onSubmit()" class="container mt-5 mb-5">
+    <h2>Create New Course</h2>
     <!-- Course Title -->
     <div class="mb-3">
         <label for="title" class="form-label">Course Title</label>
-        <input formControlName="title" id="title" class="form-control" placeholder="Enter course title">
-        <div class="text-danger small mt-1"
-            *ngIf="courseForm.get('title')?.invalid && courseForm.get('title')?.touched">
-            Title is required.
-        </div>
+        <input id="title" formControlName="title" type="text" class="form-control" placeholder="Enter course title" />
     </div>
 
     <!-- Course Description -->
     <div class="mb-3">
         <label for="description" class="form-label">Course Description</label>
-        <textarea formControlName="description" id="description" class="form-control" rows="3"
+        <textarea id="description" formControlName="description" rows="4" class="form-control"
             placeholder="Enter course description"></textarea>
-        <div class="text-danger small mt-1"
-            *ngIf="courseForm.get('description')?.invalid && courseForm.get('description')?.touched">
-            Description is required.
+    </div>
+
+    <!-- Course Description -->
+    <div class="mb-3">
+        <label for="price" class="form-label">Course Price</label>
+        <input id="price" type="nnumber" class="form-control" placeholder="Enter course price" />
+
+    </div>
+
+    <!-- Course Image -->
+    <div class="mb-3">
+        <label for="courseImage" class="form-label">Course Image</label>
+        <input id="courseImage" type="file" class="form-control" (change)="onImageSelected($event)"
+            accept="image/jpeg, image/png" />
+        <div *ngIf="selectedImageName" class="mt-2">
+            <span class="badge bg-primary">Selected Image: {{ selectedImageName }}</span>
         </div>
     </div>
 
     <!-- Sections -->
-    <div formArrayName="sections">
-        <div *ngFor="let section of sections.controls; let i = index" [formGroupName]="i"
-            class="border rounded p-3 mb-3">
-            <!-- Section Title -->
-            <div class="mb-3 d-flex justify-content-between align-items-center">
-                <div class="w-75">
-                    <label for="sectionTitle-{{ i }}" class="form-label">Section Title</label>
-                    <input formControlName="sectionTitle" id="sectionTitle-{{ i }}" class="form-control"
-                        placeholder="Enter section title">
-                    <div class="text-danger small mt-1"
-                        *ngIf="section.get('sectionTitle')?.invalid && section.get('sectionTitle')?.touched">
-                        Section Title is required.
-                    </div>
+    <div formArrayName="sections" class="mb-3">
+        <div *ngFor="let section of sections.controls; let i = index" [formGroupName]="i" class="card mb-4">
+            <div class="card-body">
+                <h4 class="card-title mb-3">Section {{ i + 1 }}</h4>
+
+                <!-- Section Title -->
+                <div class="mb-3">
+                    <label for="sectionTitle" class="form-label">Section Title</label>
+                    <input id="sectionTitle" formControlName="title" type="text" class="form-control"
+                        placeholder="Enter section title" />
                 </div>
-                <button type="button" class="btn btn-danger btn-sm" (click)="removeSection(i)">Remove Section</button>
-            </div>
 
-            <!-- Lectures -->
-            <div formArrayName="lectures">
-                <div *ngFor="let lecture of getLectureControls(i); let j = index" [formGroupName]="j" class="mb-3">
-                    <!-- Lecture Title -->
-                    <div class="mb-3">
-                        <label for="lectureTitle-{{ i }}-{{ j }}" class="form-label">Lecture Title</label>
-                        <input formControlName="lectureTitle" id="lectureTitle-{{ i }}-{{ j }}" class="form-control"
-                            placeholder="Enter lecture title">
-                        <div class="text-danger small mt-1"
-                            *ngIf="lecture.get('lectureTitle')?.invalid && lecture.get('lectureTitle')?.touched">
-                            Lecture Title is required.
+                <!-- Lectures -->
+                <div formArrayName="lectures" class="mt-4">
+                    <div *ngFor="let lecture of getLectures(i).controls; let j = index" [formGroupName]="j"
+                        class="border rounded p-3 mb-3">
+                        <h5 class="mb-3">Lecture {{ j + 1 }}</h5>
+
+                        <!-- Lecture Title -->
+                        <div class="mb-3">
+                            <label for="lectureTitle" class="form-label">Lecture Title</label>
+                            <input id="lectureTitle" formControlName="title" type="text" class="form-control"
+                                placeholder="Enter lecture title" />
                         </div>
-                    </div>
 
-                    <!-- Lecture Video -->
-                    <div class="mb-3">
-                        <label for="lectureVideo-{{ i }}-{{ j }}" class="form-label">Lecture Video</label>
-                        <input type="file" id="lectureVideo-{{ i }}-{{ j }}" formControlName="lectureVideo"
-                            class="form-control" accept="video/*">
-                        <div class="text-danger small mt-1"
-                            *ngIf="lecture.get('lectureVideo')?.invalid && lecture.get('lectureVideo')?.touched">
-                            Lecture Video is required.
+                        <!-- Lecture Video -->
+                        <div class="mb-3">
+                            <label for="lectureVideo" class="form-label">Lecture Video</label>
+                            <input id="lectureVideo" type="file" class="form-control" accept="video/mp4"
+                                (change)="onFileSelected($event, 'lecture', i, j)" />
                         </div>
-                    </div>
 
-                    <!-- Lecture Captions -->
-                    <div class="mb-3">
-                        <label for="lectureCaptions-{{ i }}-{{ j }}" class="form-label">Lecture Captions</label>
-                        <input type="file" id="lectureCaptions-{{ i }}-{{ j }}" formControlName="lectureCaptions"
-                            class="form-control" accept=".vtt">
-                        <div class="text-danger small mt-1"
-                            *ngIf="lecture.get('lectureCaptions')?.invalid && lecture.get('lectureCaptions')?.touched">
-                            Captions file is required.
+                        <!-- Subtitles -->
+                        <div formArrayName="subtitles" class="mt-3">
+                            <div *ngFor="let subtitle of getSubtitles(i, j).controls; let k = index" [formGroupName]="k"
+                                class="mb-3">
+                                <h6>Subtitle {{ k + 1 }}</h6>
+
+                                <div class="mb-2">
+                                    <label for="subtitleLanguage" class="form-label">Language</label>
+                                    <input id="subtitleLanguage" formControlName="language" type="text"
+                                        class="form-control" placeholder="Enter subtitle language" />
+                                </div>
+
+                                <div class="mb-2">
+                                    <label for="subtitleUrl" class="form-label">Subtitle File</label>
+                                    <input id="subtitleUrl" type="file" class="form-control" accept="text/vtt"
+                                        (change)="onFileSelected($event, 'subtitle', i, j,k)" />
+                                </div>
+
+                                <button type="button" class="btn btn-danger" (click)="removeSubtitle(i, j, k)">Remove
+                                    Subtitle</button>
+                            </div>
+                            <button type="button" class="btn btn-secondary mt-2 mb-2" (click)="addSubtitle(i, j)">Add
+                                Subtitle</button>
                         </div>
-                    </div>
 
-                    <!-- Remove Lecture -->
-                    <button type="button" class="btn btn-danger btn-sm" (click)="removeLecture(i, j)">Remove
-                        Lecture</button>
+
+
+                        <button type="button" class="btn btn-danger" (click)="removeLecture(i, j)">
+                            Remove Lecture
+                        </button>
+                    </div>
+                    <button type="button" class="btn btn-secondary" (click)="addLecture(i)">
+                        Add Lecture
+                    </button>
                 </div>
-            </div>
 
-            <!-- Add Lecture Button -->
-            <button type="button" class="btn btn-outline-primary btn-sm" (click)="addLecture(i)">Add Lecture</button>
+                <button type="button" class="btn btn-danger mt-3" (click)="removeSection(i)">
+                    Remove Section
+                </button>
+            </div>
         </div>
+        <button type="button" class="btn btn-primary" (click)="addSection()">
+            Add Section
+        </button>
     </div>
 
-    <!-- Add Section Button -->
-    <div class="mb-3">
-        <button type="button" class="btn btn-outline-success" (click)="addSection()">Add Section</button>
-    </div>
-
-    <!-- Submit Button -->
-    <button type="submit" class="btn btn-primary" [disabled]="courseForm.invalid">Submit</button>
+    <button type="submit" class="btn btn-success mb-5" [disabled]="isUploading">
+        Create Course
+    </button>
 </form>
