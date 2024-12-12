@@ -14,6 +14,10 @@
             <h3 class="course-details_title">{{ course.title }}</h3>
             <p class="course-details_description">{{ course.description }}</p>
             <p class="course-details_total-modules">Total Modules: {{ course.totalSectionsCount }}</p>
+            <p class="course-details_total-modules">
+				<span *ngIf="course.status === 'TRANSCODING_COMPLETED'">Status: Transcoding Completed</span>
+				<span *ngIf="course.status === 'TRANSCODING_IN_PROGRESS'">Status: Transcoding Inprogress</span>
+			</p>
           </div>
         </div>
       </div>
