@@ -3,7 +3,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
 import { environment } from 'src/environments/environment';
 import {
+	ForgotPasswordRequestDTO,
 	GetInstructorProfileResponseDTO,
+	GoogleSignInRequestDTO,
+	GoogleSignInResponseDTO,
+	ResetPasswordRequestDTO,
 	SigninInstructorRequestDTO,
 	SigninInstructorResponseDTO,
 	SignupInstructorRequestDTO,
@@ -41,6 +45,33 @@ export class AuthService {
 		return this._httpClient.post<SigninInstructorResponseDTO>(
 			`${this._authApiUrl}/instructor/sign-in`,
 			signinInstructorRequestDTO
+		);
+	}
+
+	forgotPassword(
+		forgotPasswordRequestDTO: ForgotPasswordRequestDTO
+	): Observable<null> {
+		return this._httpClient.post<null>(
+			`${this._authApiUrl}/instructor/forgot-password`,
+			forgotPasswordRequestDTO
+		);
+	}
+
+	resetPassword(
+		resetPasswordRequestDTO: ResetPasswordRequestDTO
+	): Observable<null> {
+		return this._httpClient.post<null>(
+			`${this._authApiUrl}/instructor/reset-password`,
+			resetPasswordRequestDTO
+		);
+	}
+
+	googleSignin(
+		googleSigninRequestDTO: GoogleSignInRequestDTO
+	): Observable<GoogleSignInResponseDTO> {
+		return this._httpClient.post<GoogleSignInResponseDTO>(
+			`${this._authApiUrl}/instructor/sign-in/gmail`,
+			googleSigninRequestDTO
 		);
 	}
 }

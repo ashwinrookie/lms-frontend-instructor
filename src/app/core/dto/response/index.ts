@@ -6,6 +6,8 @@ export * from "./get-course.response.dto";
 
 export * from "./get-instructor-profile.response.dto";
 
+export * from "./google-singin-response.dto";
+
 export * from "./signin-instructor.response.dto";
 
 export * from "./signup-instructor.response.dto";
