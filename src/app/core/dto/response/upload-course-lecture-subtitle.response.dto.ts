@@ -1,19 +1,16 @@
-
 interface UploadCourseLectureSubtitleFieldsResponseDTO {
-	key: string;
-	bucket: string;
-	"X-Amz-Algorithm": string;
-	"X-Amz-Credential": string;
-	"X-Amz-Date": string;
-	Policy: string;
-	"X-Amz-Signature": string;
+  key: string;
+  bucket: string;
+  'X-Amz-Algorithm': string;
+  'X-Amz-Credential': string;
+  'X-Amz-Date': string;
+  Policy: string;
+  'X-Amz-Signature': string;
 }
 
 interface UploadCourseLectureSubtitleResponseDTO {
-	url: string;
-	fields: UploadCourseLectureSubtitleFieldsResponseDTO[];
+  url: string;
+  fields: UploadCourseLectureSubtitleFieldsResponseDTO;
 }
 
-export {
-	UploadCourseLectureSubtitleResponseDTO
-};
+export { UploadCourseLectureSubtitleResponseDTO };
