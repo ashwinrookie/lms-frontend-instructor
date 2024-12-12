@@ -8,12 +8,14 @@ import {
 	HttpInterceptor,
 	HttpErrorResponse,
 	HttpResponse,
-	HttpClient
+	HttpClient,
+	HttpContextToken
 } from '@angular/common/http';
 import { catchError, map, Observable, switchMap, throwError } from 'rxjs';
 import { getErrorMessage } from '../helpers';
 import { ErrorCodes } from '../errors';
 
+export const SKIP_AUTH = new HttpContextToken<boolean>(() => false);
 
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
@@ -25,9 +27,11 @@ export class HttpInterceptorService implements HttpInterceptor {
 
 	intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 		const token = localStorage.getItem('authToken');
+		const skipAuth = request.context.get(SKIP_AUTH);
+
 		let clonedRequest = request;
 
-		if (token)
+		if (token && !skipAuth)
 			clonedRequest = request.clone({
 				setHeaders: {
 					authorization: `Bearer ${token}`
@@ -80,7 +84,8 @@ export class HttpInterceptorService implements HttpInterceptor {
 				const clonedRequest = request.clone({
 					setHeaders: {
 						Authorization: `Bearer ${newAccessToken}`
-					}
+					},
+					withCredentials: true
 				});
 
 				return next.handle(clonedRequest);
